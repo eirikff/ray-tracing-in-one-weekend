@@ -1,29 +1,33 @@
+#include <cstddef>
+#include <cstdint>
 #include <iostream>
-#include <vector>
-#include <ranges>
-#include <string>
+#include <sys/types.h>
 
-void print_vector(const std::string &name, const std::vector<int> &vector) {
-	std::cout << name << " = ";
-	for (const int &value : vector) {
-		std::cout << value << ", ";
+#include "image.h"
+
+using namespace RayTracer;
+
+int main (int argc, char *argv[]) 
+{
+	RGBImage im(256, 256);
+
+	// Create gradient
+	for (size_t x = 0; x < im.Width(); x++)
+	{
+		for (size_t y = 0; y < im.Height(); y++)
+		{
+			double r = double(x) / (im.Width() - 1);
+			double g = double(y) / (im.Height() - 1);
+
+			uint8_t ir = int(255 * r);
+			uint8_t ig = int(255 * g);
+			uint8_t ib = 0;
+
+			im(x, y) = {ir, ig, ib};
+		}
 	}
-	std::cout << std::endl;
-}
 
-int main (int argc, char *argv[]) {
-	std::vector<int> v1{1, 2, 3};
-	std::vector<int> v2{4, 5, 6};
-
-	std::cout << "Before swap:" << std::endl;
-	print_vector("v1", v1);
-	print_vector("v2", v2);
-
-	std::ranges::swap(v1, v2);
-
-	std::cout << "After swap:" << std::endl;
-	print_vector("v1", v1);
-	print_vector("v2", v2);
+	std::cout << "Wrote " << im.ToFile("test.ppm") << " bytes" << std::endl;
 
 	return 0;
 }
