@@ -6,7 +6,8 @@
 #include <ostream>
 
 
-namespace RayTracer {
+namespace RayTracer 
+{
 
 class Vector3d;
 using Point3 = Vector3d;
@@ -63,6 +64,7 @@ public:
 		Vector3d ret{ x() * s, y() * s, z() * s };
 		return ret;
 	}
+	friend Vector3d operator*(double s, const Vector3d &v) { return v * s; }
 	Vector3d &operator*=(double s) 
 	{
 		m_data[0] *= s;
