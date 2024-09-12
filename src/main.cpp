@@ -1,33 +1,35 @@
 #include <cstddef>
-#include <cstdint>
-#include <iostream>
-#include <sys/types.h>
 
-#include "image.h"
+#include "camera.h"
 
 using namespace RayTracer;
 
-int main (int argc, char *argv[]) 
+
+void Run(size_t image_width)
 {
-	RGBImage im(256, 256);
+	double aspect_ratio = 16.0 / 9.0;
 
-	// Create gradient
-	for (size_t x = 0; x < im.Width(); x++)
-	{
-		for (size_t y = 0; y < im.Height(); y++)
-		{
-			double r = double(x) / (im.Width() - 1);
-			double g = double(y) / (im.Height() - 1);
+	size_t image_height = int(image_width / aspect_ratio);
+	// Make sure height is at least 1
+	image_height = (image_height < 1) ? 1 : image_height;
 
-			uint8_t ir = int(255 * r);
-			uint8_t ig = int(255 * g);
-			uint8_t ib = 0;
+	double viewport_height = 2.0;
+	double viewport_width = (viewport_height * image_width) / image_height;
 
-			im(x, y) = {ir, ig, ib};
-		}
-	}
+	double focal_length = 1;
+	Vector3d origin{0, 0, 0};
 
-	std::cout << "Wrote " << im.ToFile("test.ppm") << " bytes" << std::endl;
+	Camera cam{
+		image_width, image_height, 
+		viewport_width, viewport_height,
+		focal_length, origin
+	};
+	cam.Render();
+	cam.Save("output.ppm");
+}
 
+int main() 
+{
+	Run(400);
 	return 0;
 }

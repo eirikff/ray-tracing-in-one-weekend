@@ -9,6 +9,9 @@ set(CMAKE_BUILD_TYPE Debug)
 
 add_executable(${PROJECT_NAME} 
 	src/main.cpp
+	src/image.cpp
+	src/vector3d.cpp
+	src/camera.cpp
 )
 target_include_directories(${PROJECT_NAME} PRIVATE src)
 target_compile_options(${PROJECT_NAME} PRIVATE
