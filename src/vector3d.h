@@ -10,7 +10,7 @@ namespace RayTracer
 {
 
 class Vector3d;
-using Point3 = Vector3d;
+using Point3d = Vector3d;
 
 
 class Vector3d
