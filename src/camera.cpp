@@ -17,6 +17,24 @@ RGB Gradient(const Ray &r)
 	return Lerp(white, blue, t);
 }
 
+bool SphereIntersect(const Ray &r, const Point3d &sphere_center, double radius)
+{
+	Vector3d cq = sphere_center - r.Origin();
+	double a = r.Direction().LengthSquared();  // d.dot(d)
+	double b = -2 * r.Direction().dot(cq);
+	double c = cq.LengthSquared() - radius * radius;
+	double discriminant = b*b - 4*a*c;
+	return discriminant >= 0;
+}
+
+RGB RenderSphereIntersect(const Ray &r, const Point3d &sphere_center, double radius)
+{
+	if (SphereIntersect(r, sphere_center, radius))
+		return RGB{1, 0, 0};
+
+	return Gradient(r);
+}
+
 void Camera::Render()
 {
 	for (size_t y = 0; y < m_image_height; y++)
@@ -27,7 +45,7 @@ void Camera::Render()
 			auto ray_direction = pixel_center - m_origin;
 			Ray r(m_origin, ray_direction);
 
-			RGB pixel_color = Gradient(r);
+			RGB pixel_color = RenderSphereIntersect(r, Point3d{0, 0, -1}, 0.5);
 			m_image(x, y) = pixel_color.Uint8();
 		}
 	}
