@@ -14,24 +14,15 @@
 namespace RayTracer
 {
 
-template<size_t Depth>
-class Image;
-
-using RGBImage = Image<3>;
-using MonoImage = Image<1>;
-
-template<size_t Depth>
 class Image 
 {
 public:
+	constexpr static int Depth = 3;
 	using Pixel = std::array<uint8_t, Depth>;
 
 	Image(size_t width, size_t height)
 	: m_width(width), m_height(height)
 	{ 
-		static_assert(Depth == 1 || Depth == 3, 
-			"Only image depths 1 or 3 are supported");
-
 		m_data.resize(height);
 		for (auto &row : m_data)
 		{
