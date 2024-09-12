@@ -3,6 +3,7 @@
 #include <cmath>
 #include <cstddef>
 #include <array>
+#include <cstdint>
 #include <ostream>
 
 
@@ -12,6 +13,7 @@ namespace RayTracer
 class Vector3d;
 using Point3d = Vector3d;
 
+Vector3d Lerp(const Vector3d &a, const Vector3d &b, double t);
 
 class Vector3d
 {
@@ -35,6 +37,14 @@ public:
 	const double &operator[](size_t i) const { return m_data[i]; }
 	double &operator[](size_t i) { return m_data[i]; }
 
+	Vector3d &operator=(const Vector3d &other)
+	{
+		if (this == &other)
+			return *this;
+
+		m_data = { other.x(), other.y(), other.z() };
+		return *this;
+	}
 	Vector3d operator+(const Vector3d &other) const
 	{
 		Vector3d ret{ x() + other.x(), y() + other.y(), z() + other.z() };
@@ -108,6 +118,13 @@ public:
 	double LengthSquared() const { return x()*x() + y()*y() + z()*z(); }
 	double Length() const { return std::sqrt(LengthSquared()); }
 	Vector3d Unit() const { return *this / Length(); }
+	std::array<uint8_t, 3> Uint8() const 
+	{
+		auto u = Unit() * 255;
+		return std::array<uint8_t, 3>{ 
+			uint8_t(u.x()), uint8_t(u.y()), uint8_t(u.z())
+		};
+	}
 
 protected:
 	std::array<double, 3> m_data;
