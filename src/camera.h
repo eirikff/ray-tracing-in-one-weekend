@@ -27,6 +27,7 @@ public:
 	Vector3d origin;
 	size_t samples_per_pixel = 10;
 	bool verbose = false;
+	size_t max_bounces = 10;
 
 private:
 	size_t m_image_height;
@@ -54,7 +55,7 @@ private:
 		);
 	}
 	Ray GetRay(size_t x, size_t y) const;
-	RGB GetRayColor(const Ray& ray) const;
+	RGB GetRayColor(const Ray& ray, int depth) const;
 
 	bool m_is_initialized = false;
 	void Initialize(bool force_initialize = false);

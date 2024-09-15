@@ -1,6 +1,5 @@
 #pragma once
 
-#include "vector3d.h"
 #include <cmath>
 #include <cstdlib>
 #include <limits>

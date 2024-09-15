@@ -47,12 +47,20 @@ void Camera::Initialize(bool force_initialize)
 	m_is_initialized = true;
 }
 
-RGB Camera::GetRayColor(const Ray &r) const
+RGB Camera::GetRayColor(const Ray &r, int depth) const
 {
+	// At the maxium depth/number of bounces, no more light is emitted (i.e. black)
+	if (depth <= 0)
+	{
+		return RGB{0, 0, 0};
+	}
+
 	Hittable::HitRecord record;
 	if (m_scene.Hit(r, Interval(0, Constants::Infinity), record))
 	{
-		return 0.5 * (record.normal + RGB{1, 1, 1});
+		// return 0.5 * (record.normal + RGB{1, 1, 1});
+		Vector3d direction = Vector3d::RandomOnHemisphere(record.normal);
+		return 0.5 * GetRayColor(Ray(record.point, direction), depth - 1);
 	}
 
 	// Make background gradient
@@ -90,7 +98,7 @@ void Camera::Render(bool force_initialize)
 			for (size_t s = 0; s < samples_per_pixel; s++)
 			{
 				Ray r = GetRay(x, y);
-				RGB sampled_color = GetRayColor(r);
+				RGB sampled_color = GetRayColor(r, max_bounces);
 				pixel_color += sampled_color;
 			}
 			m_image(x, y) = pixel_color / samples_per_pixel;

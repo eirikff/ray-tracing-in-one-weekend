@@ -3,8 +3,9 @@
 #include <cmath>
 #include <cstddef>
 #include <array>
-#include <cstdint>
 #include <ostream>
+
+#include "utility.h"
 
 
 namespace RayTracer 
@@ -117,8 +118,38 @@ public:
 	double Length() const { return std::sqrt(LengthSquared()); }
 	Vector3d Unit() const { return *this / Length(); }
 
-
 	static Vector3d Lerp(const Vector3d &a, const Vector3d &b, double t);
+	static Vector3d Random()
+	{
+		return Vector3d(Utility::random_double(), 
+						Utility::random_double(),
+						Utility::random_double()
+		);
+	}
+	static Vector3d Random(double min, double max)
+	{
+		return Vector3d(Utility::random_double(min, max), 
+						Utility::random_double(min, max),
+						Utility::random_double(min, max)
+		);
+	}
+	static Vector3d RandomUnitVector()
+	{
+		return Random(-1, 1).Unit();
+	}
+	static Vector3d RandomOnHemisphere(const Vector3d &normal)
+	{
+		auto unit = RandomUnitVector();
+		if (unit.dot(normal) > 0.0)
+		{
+			return unit;
+		}
+		else 
+		{
+			return -unit;
+		}
+	}
+
 
 
 protected:

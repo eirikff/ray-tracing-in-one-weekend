@@ -19,11 +19,13 @@ void Run(size_t image_width)
 	cam.image_width = image_width;
 	cam.aspect_ratio = 16.0 / 9.0;
 	cam.origin = Vector3d(0, 0, 0);
-	cam.samples_per_pixel = 50;
+	cam.samples_per_pixel = 10;
+	cam.max_bounces = 10;
 	cam.verbose = true;
 	cam.SetScene(scene);
 	cam.Render();
 	cam.Save("output.png");
+	cam.Save("output.ppm");
 }
 
 int main() 
