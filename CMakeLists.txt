@@ -16,8 +16,16 @@ add_executable(${PROJECT_NAME}
 	src/hittable_list.cpp
 	src/interval.cpp
 	src/color.cpp
+	src/stb_image_write.cpp
 )
 target_include_directories(${PROJECT_NAME} PRIVATE src)
+
+# Disable specific warning for stb image write header library
+set_source_files_properties(
+	src/stb_image_write.cpp
+	PROPERTIES APPEND_STRING PROPERTY COMPILE_FLAGS " -Wno-missing-field-initializers"
+)
+
 target_compile_options(${PROJECT_NAME} PRIVATE
 	-Wall
 	-Wextra

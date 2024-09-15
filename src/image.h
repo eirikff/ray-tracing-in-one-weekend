@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <memory>
 #include <sstream>
 #include <cstdint>
 #include <string>
@@ -56,7 +57,10 @@ public:
 		return m_data[y][x][c];
 	}
 
+	const std::shared_ptr<uint8_t[]> ToBuffer() const;
+
 	int SaveAsPPM(std::filesystem::path filepath) const;
+	int SaveAsPNG(std::filesystem::path filepath) const;
 
 protected:
 	size_t m_width;

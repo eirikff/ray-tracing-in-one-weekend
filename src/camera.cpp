@@ -102,9 +102,23 @@ void Camera::Render(bool force_initialize)
 
 void Camera::Save(std::filesystem::path filepath) const
 {
-	int bytes = m_image.SaveAsPPM(filepath);
-	std::cout << "Successfully wrote " << bytes << " bytes to " 
-		<< filepath << std::endl;
+	if (filepath.extension() == ".ppm")
+	{
+		int bytes = m_image.SaveAsPPM(filepath);
+		std::cout << "Successfully wrote " << bytes << " bytes to " 
+			<< filepath << std::endl;
+	}
+	else if (filepath.extension() == ".png")
+	{
+		m_image.SaveAsPNG(filepath);
+		std::cout << "Successfully wrote to " 
+			<< filepath << std::endl;
+	}
+	else 
+	{
+		std::cout << "File extension " << filepath.extension() 
+			<< " is not supported" << std::endl;
+	}
 }
 
 }
