@@ -10,9 +10,9 @@ namespace RayTracer
 class Ray 
 {
 public:
-	Ray() { }
+	Ray() : m_color(0, 0, 0) { }
 	Ray(const Vector3d &origin, const Vector3d &direction)
-	: m_origin(origin), m_direction(direction.Unit())
+	: m_origin(origin), m_direction(direction.Unit()), m_color(0, 0, 0)
 	{ }
 	Ray(const Vector3d &origin, const Vector3d &direction, const RGB &color)
 	: m_origin(origin), m_direction(direction.Unit()), m_color(color)

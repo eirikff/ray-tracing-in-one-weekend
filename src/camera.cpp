@@ -76,7 +76,7 @@ void Camera::Render(bool force_initialize)
 			Ray r(origin, ray_direction);
 
 			RGB pixel_color = GetRayColor(r);
-			m_image(x, y) = pixel_color.Uint8();
+			m_image(x, y) = pixel_color;
 		}
 	}
 }

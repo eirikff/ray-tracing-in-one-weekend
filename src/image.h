@@ -11,15 +11,15 @@
 #include <vector>
 #include <array>
 
+#include "interval.h"
+#include "color.h"
+
 namespace RayTracer
 {
 
 class Image 
 {
 public:
-	constexpr static int Depth = 3;
-	using Pixel = std::array<uint8_t, Depth>;
-
 	Image() {}
 	Image(size_t width, size_t height)
 	: m_width(width), m_height(height)
@@ -28,10 +28,6 @@ public:
 		for (auto &row : m_data)
 		{
 			row.resize(width);
-			for (Pixel &channel : row)
-			{
-				channel.fill(0);
-			}
 		}
 	}
 
@@ -42,67 +38,32 @@ public:
 		return std::make_pair(m_width, m_height); 
 	}
 
-	Pixel& operator()(size_t x, size_t y)
+	RGB& operator()(size_t x, size_t y)
 	{
 		return m_data[y][x];
 	}
-	const Pixel& operator()(size_t x, size_t y) const
+	const RGB& operator()(size_t x, size_t y) const
 	{
 		return m_data[y][x];
 	}
 
-	uint8_t& operator()(size_t x, size_t y, size_t c)
+	double& operator()(size_t x, size_t y, size_t c)
 	{
 		return m_data[y][x][c];
 	}
-	const uint8_t& operator()(size_t x, size_t y, size_t c) const
+	const double& operator()(size_t x, size_t y, size_t c) const
 	{
 		return m_data[y][x][c];
 	}
 
-	std::string ToPPM() const
-	{
-		std::stringstream ss;
-		
-		ss << "P3\n" << m_width << " " << m_height << "\n255\n";
-		for (size_t row = 0; row < m_height; row++)
-		{
-			for (size_t col = 0; col < m_width; col++)
-			{
-				for (size_t ch = 0; ch < Depth; ch++)
-				{
-					ss << std::to_string(operator()(col, row, ch)) << " ";
-				}
-				ss << "\n";
-			}
-		}
-
-		return ss.str();
-	}
-
-	int ToFile(std::filesystem::path filepath) const 
-	{
-		std::ofstream out(filepath);
-
-		if (!out) 
-		{
-			std::cerr << "Failed to open file '" << filepath << 
-				"' for writing" << std::endl;
-			return 0;
-		}
-
-		out << this->ToPPM();
-		int byte_count = out.tellp();
-		out.close();
-
-		return byte_count;
-	}
+	std::string ToPPM() const;
+	int ToFile(std::filesystem::path filepath) const;
 
 protected:
 	size_t m_width;
 	size_t m_height;
 
-	std::vector<std::vector<Pixel>> m_data;
+	std::vector<std::vector<RGB>> m_data;
 };
 
 }

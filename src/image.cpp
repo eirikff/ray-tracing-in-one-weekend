@@ -1,7 +1,42 @@
 #include "image.h"
+#include <string>
 
 namespace RayTracer
 {
+
+std::string Image::ToPPM() const
+{
+	std::stringstream ss;
+	
+	ss << "P3\n" << m_width << " " << m_height << "\n255\n";
+	for (size_t row = 0; row < m_height; row++)
+	{
+		for (size_t col = 0; col < m_width; col++)
+		{
+			ss << (*this)(col, row) << "\n";
+		}
+	}
+
+	return ss.str();
+}
+
+int Image::ToFile(std::filesystem::path filepath) const 
+{
+	std::ofstream out(filepath);
+
+	if (!out) 
+	{
+		std::cerr << "Failed to open file '" << filepath << 
+			"' for writing" << std::endl;
+		return 0;
+	}
+
+	out << this->ToPPM();
+	int byte_count = out.tellp();
+	out.close();
+
+	return byte_count;
+}
 
 void GradientTestImage(std::filesystem::path filepath)
 {
@@ -14,12 +49,7 @@ void GradientTestImage(std::filesystem::path filepath)
 		{
 			double r = double(x) / (im.Width() - 1);
 			double g = double(y) / (im.Height() - 1);
-
-			uint8_t ir = int(255 * r);
-			uint8_t ig = int(255 * g);
-			uint8_t ib = 0;
-
-			im(x, y) = {ir, ig, ib};
+			im(x, y) = RGB{r, g, 0};
 		}
 	}
 

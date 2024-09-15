@@ -116,13 +116,6 @@ public:
 	double LengthSquared() const { return x()*x() + y()*y() + z()*z(); }
 	double Length() const { return std::sqrt(LengthSquared()); }
 	Vector3d Unit() const { return *this / Length(); }
-	std::array<uint8_t, 3> Uint8() const 
-	{
-		auto u = Unit() * 255;
-		return std::array<uint8_t, 3>{ 
-			uint8_t(u.x()), uint8_t(u.y()), uint8_t(u.z())
-		};
-	}
 
 
 	static Vector3d Lerp(const Vector3d &a, const Vector3d &b, double t);

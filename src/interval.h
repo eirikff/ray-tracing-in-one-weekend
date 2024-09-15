@@ -24,10 +24,16 @@ public:
 	double Size() const { return m_max - m_min; }
 	// Contains chekcs if the value is within the interval, including the 
 	// lower and upper bounds
-	bool Contains(double v) { return m_min <= v && v <= m_max; }
+	bool Contains(double v) const { return m_min <= v && v <= m_max; }
 	// Surrounds only checks if the value is within the bounds, but not at the
 	// bounds
-	bool Surrounds(double v) { return m_min < v && v < m_max; }
+	bool Surrounds(double v) const { return m_min < v && v < m_max; }
+	double Clamp(double v) const
+	{
+		if (v < m_min) return m_min;
+		if (v > m_max) return m_max;
+		return v;
+	}
 
 	static const Interval Empty;
 	static const Interval Universe;
