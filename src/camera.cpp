@@ -22,9 +22,9 @@ double SphereIntersect(const Ray &r, const Point3d &sphere_center, double radius
 {
 	Vector3d cq = sphere_center - r.Origin();
 	double a = r.Direction().LengthSquared();  // d.dot(d)
-	double b = -2 * r.Direction().dot(cq);
+	double h = r.Direction().dot(cq);
 	double c = cq.LengthSquared() - radius * radius;
-	double discriminant = b*b - 4*a*c;
+	double discriminant = h*h - a*c;
 
 	if (discriminant < 0)
 	{
@@ -32,7 +32,7 @@ double SphereIntersect(const Ray &r, const Point3d &sphere_center, double radius
 	}
 	else 
 	{
-		return (-b - std::sqrt(discriminant)) / (2.0 * a);
+		return (h - std::sqrt(discriminant)) / a;
 	}
 }
 
