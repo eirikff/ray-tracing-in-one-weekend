@@ -63,6 +63,18 @@ RGB Camera::GetRayColor(const Ray &r) const
 	return Vector3d::Lerp(white, blue, t);
 }
 
+Ray Camera::GetRay(size_t x, size_t y) const
+{
+	Vector3d offset = SampleSquare();
+
+	auto pixel_sample = m_pixel_00 
+						+ (x + offset.x()) * m_pixel_delta_u 
+						+ (y + offset.y()) * m_pixel_delta_v;
+	auto ray_direction = pixel_sample - origin;
+
+	return Ray(origin, ray_direction);
+}
+
 void Camera::Render(bool force_initialize)
 {
 	Initialize(force_initialize);
@@ -71,12 +83,14 @@ void Camera::Render(bool force_initialize)
 	{
 		for (size_t x = 0; x < image_width; x++)
 		{
-			auto pixel_center = m_pixel_00 + x*m_pixel_delta_u + y*m_pixel_delta_v;
-			auto ray_direction = pixel_center - origin;
-			Ray r(origin, ray_direction);
-
-			RGB pixel_color = GetRayColor(r);
-			m_image(x, y) = pixel_color;
+			RGB pixel_color{0, 0, 0};
+			for (size_t s = 0; s < samples_per_pixel; s++)
+			{
+				Ray r = GetRay(x, y);
+				RGB sampled_color = GetRayColor(r);
+				pixel_color += sampled_color;
+			}
+			m_image(x, y) = pixel_color / samples_per_pixel;
 		}
 	}
 }

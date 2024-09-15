@@ -22,9 +22,10 @@ public:
 	void Render(bool force_initialize = false);
 	void Save(std::filesystem::path filepath) const;
 
-	size_t image_width;
-	double aspect_ratio;
+	size_t image_width = 100;
+	double aspect_ratio = 1.0;
 	Vector3d origin;
+	size_t samples_per_pixel = 10;
 
 private:
 	size_t m_image_height;
@@ -43,6 +44,15 @@ private:
 	
 	HittableList m_scene;
 
+	Vector3d SampleSquare() const
+	{
+		return Vector3d(
+			Utility::random_double() - 0.5, 
+			Utility::random_double() - 0.5, 
+			0
+		);
+	}
+	Ray GetRay(size_t x, size_t y) const;
 	RGB GetRayColor(const Ray& ray) const;
 
 	bool m_is_initialized = false;
