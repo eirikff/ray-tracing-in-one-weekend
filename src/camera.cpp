@@ -60,7 +60,8 @@ RGB Camera::GetRayColor(const Ray &r, int depth) const
 	if (m_scene.Hit(r, Interval(m_min_distance_from_surface, Constants::Infinity), record))
 	{
 		// return 0.5 * (record.normal + RGB{1, 1, 1});
-		Vector3d direction = Vector3d::RandomOnHemisphere(record.normal);
+		Vector3d direction = Vector3d::RandomOnHemisphere(record.normal)
+							+ Vector3d::RandomUnitVector();
 		return 0.5 * GetRayColor(Ray(record.point, direction), depth - 1);
 	}
 
