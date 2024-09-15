@@ -60,37 +60,6 @@ public:
 		return m_data[y][x][c];
 	}
 
-	std::string ToString() const 
-	{
-		std::stringstream ss; 
-
-		for (size_t row = 0; row < m_height; row++)
-		{
-			for (size_t col = 0; col < m_width; col++)
-			{
-				for (size_t ch = 0; ch < Depth; ch++)
-				{
-					ss << std::to_string(operator()(col, row, ch));
-					if (ch != Depth - 1)
-					{
-						ss << ",";
-					}
-				}
-				if (col != m_width - 1)
-				{
-					ss << "\t";
-				}
-			}
-			if (row != m_height - 1)
-			{
-				ss << "\n";
-			}
-		}
-		ss << "\n";
-
-		return ss.str();
-	}
-
 	std::string ToPPM() const
 	{
 		std::stringstream ss;
