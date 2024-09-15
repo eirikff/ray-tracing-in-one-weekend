@@ -45,6 +45,9 @@ private:
 	double m_focal_length;
 	
 	HittableList m_scene;
+	// The minimum distance from the surface a point has to be to be considered
+	// for a bounce
+	double m_min_distance_from_surface = 0.001;
 
 	Vector3d SampleSquare() const
 	{
