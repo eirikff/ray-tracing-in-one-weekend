@@ -16,8 +16,7 @@ public:
 	: m_center(center), m_radius(std::fmax(0, radius))
 	{}
 
-	virtual bool Hit(const Ray &r, double ray_tmin, double ray_tmax, 
-				     HitRecord &record) const override;
+	virtual bool Hit(const Ray &r, Interval t_int, HitRecord &record) const override;
 
 private:
 	Point3d m_center;

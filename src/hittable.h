@@ -2,6 +2,7 @@
 
 #include "ray.h"
 #include "vector3d.h"
+#include "interval.h"
 
 
 namespace RayTracer
@@ -29,8 +30,7 @@ public:
 		}
 	};
 
-	virtual bool Hit(const Ray &r, double ray_tmin, double ray_tmax, 
-				     HitRecord &record) const = 0;
+	virtual bool Hit(const Ray &r, Interval t_int, HitRecord &record) const = 0;
 };
 
 }

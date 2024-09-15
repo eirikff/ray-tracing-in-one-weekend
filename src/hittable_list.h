@@ -21,8 +21,7 @@ public:
 		m_objects.push_back(object);
 	}
 
-	virtual bool Hit(const Ray &r, double ray_tmin, double ray_tmax, 
-				     HitRecord &record) const;
+	virtual bool Hit(const Ray &r, Interval t_int, HitRecord &record) const;
 
 	HittableList &operator=(const HittableList &other)
 	{

@@ -14,6 +14,7 @@ add_executable(${PROJECT_NAME}
 	src/camera.cpp
 	src/sphere.cpp
 	src/hittable_list.cpp
+	src/interval.cpp
 )
 target_include_directories(${PROJECT_NAME} PRIVATE src)
 target_compile_options(${PROJECT_NAME} PRIVATE

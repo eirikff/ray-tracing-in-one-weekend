@@ -4,8 +4,7 @@
 namespace RayTracer
 {
 
-bool Sphere::Hit(const Ray &r, double ray_tmin, double ray_tmax, 
-				 HitRecord &record) const
+bool Sphere::Hit(const Ray &r, Interval t_int, HitRecord &record) const
 {
 	Vector3d cq = m_center - r.Origin();
 	double a = r.Direction().LengthSquared();  // d.dot(d)
@@ -23,10 +22,10 @@ bool Sphere::Hit(const Ray &r, double ray_tmin, double ray_tmax,
 
 	// Find the nearest root that lies in the acceptable range
 	double root = (h - sqrtd) / a;
-	if (root <= ray_tmin || root >= ray_tmax)
+	if (!t_int.Contains(root))
 	{
 		root = (h + sqrtd) / a;
-		if (root <= ray_tmin || root >= ray_tmax)
+		if (!t_int.Contains(root))
 		{
 			return false;
 		}

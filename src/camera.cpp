@@ -1,5 +1,6 @@
 #include "camera.h"
 #include "hittable.h"
+#include "interval.h"
 #include "ray.h"
 #include "color.h"
 #include "vector3d.h"
@@ -24,7 +25,7 @@ RGB GetBackgroundColor(const Ray &r)
 RGB GetRayColor(const Ray &r, const HittableList &scene)
 {
 	Hittable::HitRecord record;
-	if (scene.Hit(r, 0, Constants::Infinity, record))
+	if (scene.Hit(r, Interval(0, Constants::Infinity), record))
 	{
 		return 0.5 * (record.normal + RGB{1, 1, 1});
 	}
