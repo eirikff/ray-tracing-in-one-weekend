@@ -81,6 +81,9 @@ void Camera::Render(bool force_initialize)
 
 	for (size_t y = 0; y < m_image_height; y++)
 	{
+		if (verbose)
+			std::clog << "\rScanlines completed: " << y << "/" 
+					  << m_image_height << "   " << std::flush;
 		for (size_t x = 0; x < image_width; x++)
 		{
 			RGB pixel_color{0, 0, 0};
@@ -93,6 +96,8 @@ void Camera::Render(bool force_initialize)
 			m_image(x, y) = pixel_color / samples_per_pixel;
 		}
 	}
+	if (verbose)
+		std::clog << "\rDone                                  \n" << std::flush;
 }
 
 void Camera::Save(std::filesystem::path filepath) const

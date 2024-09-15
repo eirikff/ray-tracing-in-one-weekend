@@ -1,4 +1,3 @@
-#include <complex>
 #include <cstddef>
 #include <memory>
 
@@ -20,6 +19,8 @@ void Run(size_t image_width)
 	cam.image_width = image_width;
 	cam.aspect_ratio = 16.0 / 9.0;
 	cam.origin = Vector3d(0, 0, 0);
+	cam.samples_per_pixel = 100;
+	cam.verbose = true;
 	cam.SetScene(scene);
 	cam.Render();
 	cam.Save("output.ppm");

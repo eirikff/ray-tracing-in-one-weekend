@@ -26,6 +26,7 @@ public:
 	double aspect_ratio = 1.0;
 	Vector3d origin;
 	size_t samples_per_pixel = 10;
+	bool verbose = false;
 
 private:
 	size_t m_image_height;
