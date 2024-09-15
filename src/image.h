@@ -2,18 +2,13 @@
 
 #include <cstddef>
 #include <filesystem>
-#include <fstream>
-#include <iostream>
 #include <memory>
-#include <sstream>
 #include <cstdint>
-#include <string>
 #include <utility>
 #include <vector>
-#include <array>
 
-#include "interval.h"
 #include "color.h"
+
 
 namespace RayTracer
 {
@@ -39,23 +34,17 @@ public:
 		return std::make_pair(m_width, m_height); 
 	}
 
-	RGB& operator()(size_t x, size_t y)
-	{
-		return m_data[y][x];
-	}
-	const RGB& operator()(size_t x, size_t y) const
-	{
-		return m_data[y][x];
-	}
+	void ApplyGamma(int gamma = 2);
 
-	double& operator()(size_t x, size_t y, size_t c)
-	{
-		return m_data[y][x][c];
-	}
-	const double& operator()(size_t x, size_t y, size_t c) const
-	{
-		return m_data[y][x][c];
-	}
+	RGB& At(size_t x, size_t y) { return m_data[y][x]; }
+	const RGB& At(size_t x, size_t y) const { return m_data[y][x]; }
+	RGB& operator()(size_t x, size_t y) { return At(x, y); }
+	const RGB& operator()(size_t x, size_t y) const { return At(x, y); }
+
+	double& At(size_t x, size_t y, size_t c) { return m_data[y][x][c]; }
+	const double& At(size_t x, size_t y, size_t c) const { return m_data[y][x][c]; }
+	double& operator()(size_t x, size_t y, size_t c) { return At(x, y, c); }
+	const double& operator()(size_t x, size_t y, size_t c) const { return At(x, y, c); }
 
 	const std::shared_ptr<uint8_t[]> ToBuffer() const;
 

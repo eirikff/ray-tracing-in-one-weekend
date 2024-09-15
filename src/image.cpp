@@ -1,11 +1,43 @@
 #include "image.h"
-#include "interval.h"
 #include "stb_image_write.h"
+#include <cmath>
 #include <cstdint>
+#include <fstream>
+#include <iostream>
 #include <memory>
 
 namespace RayTracer
 {
+
+double linear_to_gamma(double linear, int gamma)
+{
+	if (gamma == 2)
+	{
+		return std::sqrt(linear);
+	}
+	else 
+	{
+		return std::pow(linear, 1.0 / gamma);
+	}
+}
+
+void Image::ApplyGamma(int gamma) 
+{
+	if (gamma == 1)
+	{
+		return;
+	}
+
+	for (size_t x = 0; x < m_width; x++)
+	{
+		for (size_t y = 0; y < m_height; y++)
+		{
+			At(x, y, 0) = linear_to_gamma(At(x, y, 0), gamma);
+			At(x, y, 1) = linear_to_gamma(At(x, y, 1), gamma);
+			At(x, y, 2) = linear_to_gamma(At(x, y, 2), gamma);
+		}
+	}
+}
 
 int Image::SaveAsPPM(std::filesystem::path filepath) const 
 {
