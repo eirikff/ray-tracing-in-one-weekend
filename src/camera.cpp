@@ -3,6 +3,7 @@
 #include "color.h"
 #include "vector3d.h"
 
+#include <cmath>
 #include <iostream>
 
 namespace RayTracer
@@ -17,20 +18,32 @@ RGB Gradient(const Ray &r)
 	return Vector3d::Lerp(white, blue, t);
 }
 
-bool SphereIntersect(const Ray &r, const Point3d &sphere_center, double radius)
+double SphereIntersect(const Ray &r, const Point3d &sphere_center, double radius)
 {
 	Vector3d cq = sphere_center - r.Origin();
 	double a = r.Direction().LengthSquared();  // d.dot(d)
 	double b = -2 * r.Direction().dot(cq);
 	double c = cq.LengthSquared() - radius * radius;
 	double discriminant = b*b - 4*a*c;
-	return discriminant >= 0;
+
+	if (discriminant < 0)
+	{
+		return -1.0;
+	}
+	else 
+	{
+		return (-b - std::sqrt(discriminant)) / (2.0 * a);
+	}
 }
 
 RGB RenderSphereIntersect(const Ray &r, const Point3d &sphere_center, double radius)
 {
-	if (SphereIntersect(r, sphere_center, radius))
-		return RGB{1, 0, 0};
+	double t = SphereIntersect(r, sphere_center, radius);
+	if (t > 0)
+	{
+		Vector3d n = (r.At(t) - sphere_center).Unit();
+		return RGB{n.x() + 1, n.y() + 1, n.z() + 1};
+	}
 
 	return Gradient(r);
 }
