@@ -14,7 +14,7 @@ RGB Gradient(const Ray &r)
 	RGB blue{0.5, 0.7, 1};
 	
 	double t = 0.5 * (r.Direction().y() + 1);
-	return Lerp(white, blue, t);
+	return Vector3d::Lerp(white, blue, t);
 }
 
 bool SphereIntersect(const Ray &r, const Point3d &sphere_center, double radius)

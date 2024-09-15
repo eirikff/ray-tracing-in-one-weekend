@@ -13,8 +13,6 @@ namespace RayTracer
 class Vector3d;
 using Point3d = Vector3d;
 
-Vector3d Lerp(const Vector3d &a, const Vector3d &b, double t);
-
 class Vector3d
 {
 public:
@@ -125,6 +123,10 @@ public:
 			uint8_t(u.x()), uint8_t(u.y()), uint8_t(u.z())
 		};
 	}
+
+
+	static Vector3d Lerp(const Vector3d &a, const Vector3d &b, double t);
+
 
 protected:
 	std::array<double, 3> m_data;

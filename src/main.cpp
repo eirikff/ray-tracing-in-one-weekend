@@ -30,6 +30,6 @@ void Run(size_t image_width)
 
 int main() 
 {
-	Run(400);
+	Run(600);
 	return 0;
 }

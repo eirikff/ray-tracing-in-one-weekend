@@ -3,7 +3,7 @@
 namespace RayTracer
 {
 
-Vector3d Lerp(const Vector3d &a, const Vector3d &b, double t)
+Vector3d Vector3d::Lerp(const Vector3d &a, const Vector3d &b, double t)
 {
 	if (t < 0)
 		t = 0;
