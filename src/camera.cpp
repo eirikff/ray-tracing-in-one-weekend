@@ -6,6 +6,7 @@
 #include "vector3d.h"
 #include "utility.h"
 
+#include <chrono>
 #include <cmath>
 #include <iostream>
 
@@ -87,11 +88,15 @@ void Camera::Render(bool force_initialize)
 {
 	Initialize(force_initialize);
 
+	auto start = std::chrono::high_resolution_clock::now();
 	for (size_t y = 0; y < m_image_height; y++)
 	{
 		if (verbose)
+		{
 			std::clog << "\rScanlines completed: " << y << "/" 
 					  << m_image_height << "   " << std::flush;
+		}
+
 		for (size_t x = 0; x < image_width; x++)
 		{
 			RGB pixel_color{0, 0, 0};
@@ -104,8 +109,14 @@ void Camera::Render(bool force_initialize)
 			m_image(x, y) = pixel_color / samples_per_pixel;
 		}
 	}
+	auto end = std::chrono::high_resolution_clock::now();
+	auto duration = end - start;
 	if (verbose)
-		std::clog << "\rDone                                  \n" << std::flush;
+	{
+		std::clog << "\rDone. Time used: " 
+			<< std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() / 1000.0 
+			<< " seconds.                   " << std::endl;
+	}
 }
 
 void Camera::Save(std::filesystem::path filepath) const
