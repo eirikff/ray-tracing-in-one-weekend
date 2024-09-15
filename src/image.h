@@ -20,6 +20,7 @@ public:
 	constexpr static int Depth = 3;
 	using Pixel = std::array<uint8_t, Depth>;
 
+	Image() {}
 	Image(size_t width, size_t height)
 	: m_width(width), m_height(height)
 	{ 
