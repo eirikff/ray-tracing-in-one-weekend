@@ -56,8 +56,7 @@ public:
 		return m_data[y][x][c];
 	}
 
-	std::string ToPPM() const;
-	int ToFile(std::filesystem::path filepath) const;
+	int SaveAsPPM(std::filesystem::path filepath) const;
 
 protected:
 	size_t m_width;

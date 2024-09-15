@@ -102,7 +102,7 @@ void Camera::Render(bool force_initialize)
 
 void Camera::Save(std::filesystem::path filepath) const
 {
-	int bytes = m_image.ToFile(filepath);
+	int bytes = m_image.SaveAsPPM(filepath);
 	std::cout << "Successfully wrote " << bytes << " bytes to " 
 		<< filepath << std::endl;
 }
