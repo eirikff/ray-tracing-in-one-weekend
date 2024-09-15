@@ -1,7 +1,9 @@
 #include "camera.h"
+#include "hittable.h"
 #include "ray.h"
 #include "color.h"
 #include "vector3d.h"
+#include "utility.h"
 
 #include <cmath>
 #include <iostream>
@@ -9,7 +11,7 @@
 namespace RayTracer
 {
 
-RGB Gradient(const Ray &r)
+RGB GetBackgroundColor(const Ray &r)
 {
 	RGB white{1, 1, 1};
 	RGB blue{0.5, 0.7, 1};
@@ -18,34 +20,16 @@ RGB Gradient(const Ray &r)
 	return Vector3d::Lerp(white, blue, t);
 }
 
-double SphereIntersect(const Ray &r, const Point3d &sphere_center, double radius)
+
+RGB GetRayColor(const Ray &r, const HittableList &scene)
 {
-	Vector3d cq = sphere_center - r.Origin();
-	double a = r.Direction().LengthSquared();  // d.dot(d)
-	double h = r.Direction().dot(cq);
-	double c = cq.LengthSquared() - radius * radius;
-	double discriminant = h*h - a*c;
-
-	if (discriminant < 0)
+	Hittable::HitRecord record;
+	if (scene.Hit(r, 0, Constants::Infinity, record))
 	{
-		return -1.0;
-	}
-	else 
-	{
-		return (h - std::sqrt(discriminant)) / a;
-	}
-}
-
-RGB RenderSphereIntersect(const Ray &r, const Point3d &sphere_center, double radius)
-{
-	double t = SphereIntersect(r, sphere_center, radius);
-	if (t > 0)
-	{
-		Vector3d n = (r.At(t) - sphere_center).Unit();
-		return RGB{n.x() + 1, n.y() + 1, n.z() + 1};
+		return 0.5 * (record.normal + RGB{1, 1, 1});
 	}
 
-	return Gradient(r);
+	return GetBackgroundColor(r);
 }
 
 void Camera::Render()
@@ -58,7 +42,7 @@ void Camera::Render()
 			auto ray_direction = pixel_center - m_origin;
 			Ray r(m_origin, ray_direction);
 
-			RGB pixel_color = RenderSphereIntersect(r, Point3d{0, 0, -1}, 0.5);
+			RGB pixel_color = GetRayColor(r, m_scene);
 			m_image(x, y) = pixel_color.Uint8();
 		}
 	}

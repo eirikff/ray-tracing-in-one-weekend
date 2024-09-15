@@ -24,6 +24,15 @@ public:
 	virtual bool Hit(const Ray &r, double ray_tmin, double ray_tmax, 
 				     HitRecord &record) const;
 
+	HittableList &operator=(const HittableList &other)
+	{
+		if (this == &other)
+			return *this;
+
+		m_objects = other.m_objects;
+		return *this;
+	}
+
 private:
 	std::vector<std::shared_ptr<Hittable>> m_objects;
 };

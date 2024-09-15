@@ -4,6 +4,7 @@
 
 #include "image.h"
 #include "vector3d.h"
+#include "hittable_list.h"
 
 
 namespace RayTracer
@@ -31,6 +32,7 @@ public:
 					 + 0.5 * (m_pixel_delta_u + m_pixel_delta_v);
 	}
 
+	void SetScene(const HittableList &scene) { m_scene = scene; }
 	void Render();
 	void Save(std::filesystem::path filepath) const;
 
@@ -51,6 +53,7 @@ private:
 	double m_focal_length;
 	Vector3d m_origin;
 	
+	HittableList m_scene;
 };
 
 }
