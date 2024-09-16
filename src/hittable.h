@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "ray.h"
 #include "vector3d.h"
 #include "interval.h"
@@ -8,6 +10,7 @@
 namespace RayTracer
 {
 
+class Material;
 
 class Hittable
 {
@@ -18,6 +21,7 @@ public:
 	{
 		Point3d point;
 		Vector3d normal;
+        std::shared_ptr<Material> material;
 		double t;
 		bool front_face;
 

@@ -5,6 +5,7 @@
 #include "color.h"
 #include "vector3d.h"
 #include "utility.h"
+#include "material/material.h"
 
 #include <chrono>
 #include <cmath>
@@ -59,9 +60,12 @@ RGB Camera::GetRayColor(const Ray &r, int depth) const
 	Hittable::HitRecord record;
 	if (m_scene.Hit(r, Interval(m_min_distance_from_surface, Constants::Infinity), record))
 	{
-		Vector3d direction = Vector3d::RandomOnHemisphere(record.normal)
-							+ Vector3d::RandomUnitVector();
-		return 0.5 * GetRayColor(Ray(record.point, direction), depth - 1);
+        Ray scattered;
+        RGB attenuation;
+        if (record.material->Scatter(r, record, attenuation, scattered))
+        {
+            return attenuation * GetRayColor(r, depth - 1);
+        }
 	}
 
 	// Make background gradient

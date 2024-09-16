@@ -68,6 +68,12 @@ public:
 		m_data[2] -= other[2];
 		return *this;
 	}
+    // Element-wise multiplication
+	Vector3d operator*(const Vector3d &other) const
+	{
+		Vector3d ret{ x() * other.x(), y() * other.y(), z() * other.z() };
+		return ret;
+	}
 	Vector3d operator*(double s) const
 	{
 		Vector3d ret{ x() * s, y() * s, z() * s };
@@ -117,6 +123,12 @@ public:
 	double LengthSquared() const { return x()*x() + y()*y() + z()*z(); }
 	double Length() const { return std::sqrt(LengthSquared()); }
 	Vector3d Unit() const { return *this / Length(); }
+    bool NearZero(double tolerance = 1e-8) const 
+    { 
+        return (std::fabs(x()) < tolerance)
+            && (std::fabs(y()) < tolerance)
+            && (std::fabs(z()) < tolerance);
+    }
 
 	static Vector3d Lerp(const Vector3d &a, const Vector3d &b, double t);
 	static Vector3d Random()
@@ -149,6 +161,10 @@ public:
 			return -unit;
 		}
 	}
+    static Vector3d Reflect(const Vector3d &v, const Vector3d& n)
+    {
+        return v - 2 * v.dot(n) * n;
+    }
 
 
 

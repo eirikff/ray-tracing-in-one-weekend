@@ -35,6 +35,7 @@ bool Sphere::Hit(const Ray &r, Interval t_int, HitRecord &record) const
 	record.point = r.At(record.t);
 	Vector3d outward_normal = (record.point - m_center) / m_radius;
 	record.SetFaceNormal(r, outward_normal);
+    record.material = m_material;
 
 	return true;
 }
