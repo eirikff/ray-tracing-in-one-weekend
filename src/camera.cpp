@@ -64,8 +64,9 @@ RGB Camera::GetRayColor(const Ray &r, int depth) const
         RGB attenuation;
         if (record.material->Scatter(r, record, attenuation, scattered))
         {
-            return attenuation * GetRayColor(r, depth - 1);
+            return attenuation * GetRayColor(scattered, depth - 1);
         }
+        return RGB{0, 0, 0};
 	}
 
 	// Make background gradient
