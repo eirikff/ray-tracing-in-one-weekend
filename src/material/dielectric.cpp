@@ -1,5 +1,6 @@
 #include "dielectric.h"
 #include "hittable.h"
+#include "utility.h"
 #include "vector3d.h"
 
 
@@ -19,8 +20,9 @@ bool Dielectric::Scatter(const Ray& ray,
     double cos_theta = std::fmin(unit_direction.dot(record.normal), 1.0);
     double sin_theta = std::sqrt(1.0 - cos_theta * cos_theta);
 
+    bool cannot_refract = ri * sin_theta > 1.0;
     Vector3d direction;
-    if (ri * sin_theta > 1.0)
+    if (cannot_refract || Reflectance(cos_theta, ri) > Utility::random_double())
     {
         // Must reflect
         direction = Vector3d::Reflect(unit_direction, record.normal);
