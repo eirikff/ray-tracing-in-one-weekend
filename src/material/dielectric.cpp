@@ -17,7 +17,7 @@ bool Dielectric::Scatter(const Ray& ray,
     double ri = record.front_face ? (1.0 / m_refraction_index) : m_refraction_index;
 
     auto unit_direction = ray.Direction().Unit();
-    double cos_theta = std::fmin(unit_direction.dot(record.normal), 1.0);
+    double cos_theta = std::fmin(record.normal.dot(-unit_direction), 1.0);
     double sin_theta = std::sqrt(1.0 - cos_theta * cos_theta);
 
     bool cannot_refract = ri * sin_theta > 1.0;
