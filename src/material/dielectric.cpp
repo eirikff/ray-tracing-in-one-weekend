@@ -15,13 +15,24 @@ bool Dielectric::Scatter(const Ray& ray,
     attenuation = RGB{1, 1, 1};
     double ri = record.front_face ? (1.0 / m_refraction_index) : m_refraction_index;
 
-    Vector3d refracted = Vector3d::Refract(
-        ray.Direction().Unit(), 
-        record.normal,
-        ri
-    );
+    auto unit_direction = ray.Direction().Unit();
+    double cos_theta = std::fmin(unit_direction.dot(record.normal), 1.0);
+    double sin_theta = std::sqrt(1.0 - cos_theta * cos_theta);
 
-    scattered = Ray(record.point, refracted);
+    Vector3d direction;
+    if (ri * sin_theta > 1.0)
+    {
+        // Must reflect
+        direction = Vector3d::Reflect(unit_direction, record.normal);
+    }
+    else 
+    {
+        // Can refract
+        direction = Vector3d::Refract(unit_direction, record.normal, ri);
+    }
+
+
+    scattered = Ray(record.point, direction);
     return true;
 }
 
