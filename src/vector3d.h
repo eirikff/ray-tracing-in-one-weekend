@@ -130,7 +130,7 @@ public:
             && (std::fabs(z()) < tolerance);
     }
 
-	static Vector3d Lerp(const Vector3d &a, const Vector3d &b, double t);
+	static Vector3d Lerp(const Vector3d &a, const Vector3d &b, double t);   
 	static Vector3d Random()
 	{
 		return Vector3d(Utility::random_double(), 
@@ -164,6 +164,15 @@ public:
     static Vector3d Reflect(const Vector3d &v, const Vector3d& n)
     {
         return v - 2 * v.dot(n) * n;
+    }
+    static Vector3d Refract(const Vector3d &uv, const Vector3d &n, 
+                            double refraction_ratio)
+    {
+        double cos_theta = std::fmin(n.dot(-uv), 1.0);
+        Vector3d refracted_perp = refraction_ratio * (uv + cos_theta * n);
+        Vector3d refracted_parallel = -std::sqrt(
+            std::fabs(1.0 - refracted_perp.LengthSquared())) * n;
+        return refracted_perp + refracted_parallel;
     }
 
 

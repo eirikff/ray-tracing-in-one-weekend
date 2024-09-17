@@ -19,6 +19,7 @@ add_executable(${PROJECT_NAME}
 	src/stb_image_write.cpp
     src/material/lambertian.cpp
     src/material/metal.cpp
+    src/material/dielectric.cpp
 )
 target_include_directories(${PROJECT_NAME} PRIVATE src)
 
