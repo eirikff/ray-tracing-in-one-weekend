@@ -1,9 +1,11 @@
+#include <cmath>
 #include <cstddef>
 #include <memory>
 
 #include "camera.h"
 #include "hittable_list.h"
 #include "sphere.h"
+#include "utility.h"
 #include "vector3d.h"
 #include "material/lambertian.h"
 #include "material/metal.h"
@@ -27,6 +29,15 @@ void Run(size_t image_width)
 	scene.Add(std::make_shared<Sphere>(Point3d{-1, 0, -1}, 0.4, material_bubble));
 	scene.Add(std::make_shared<Sphere>(Point3d{1, 0, -1}, 0.5, material_right));
 
+    scene.Clear();
+    double R = std::cos(Constants::Pi / 4);
+    scene.Add(std::make_shared<Sphere>(
+        Point3d{-R, 0, -1}, R, std::make_shared<Lambertian>(RGB(0, 0, 1))
+    ));
+    scene.Add(std::make_shared<Sphere>(
+        Point3d{R, 0, -1}, R, std::make_shared<Lambertian>(RGB(1, 0, 0))
+    ));
+
 	Camera cam;
 	cam.image_width = image_width;
 	cam.aspect_ratio = 16.0 / 9.0;
@@ -34,6 +45,7 @@ void Run(size_t image_width)
 	cam.samples_per_pixel = 30;
 	cam.max_bounces = 10;
 	cam.verbose = true;
+    cam.vfov = 90;
 	cam.SetScene(scene);
 	cam.Render();
 	cam.Save("output.png");

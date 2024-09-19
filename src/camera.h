@@ -28,6 +28,7 @@ public:
 	size_t samples_per_pixel = 10;
 	bool verbose = false;
 	size_t max_bounces = 10;
+    double vfov = 90;  // Vertical field of view, in degrees
 
 private:
 	size_t m_image_height;

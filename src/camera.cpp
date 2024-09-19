@@ -25,10 +25,9 @@ void Camera::Initialize(bool force_initialize)
 
 	// TODO: should focal length be a public parameter
 	m_focal_length = 1;
-
-	// TODO: should viewport height/width be a public parameter?
-	// TODO: viewport calculation should use FOV parameter
-	m_viewport_height = 2.0;
+    double theta = Utility::deg2rad(vfov);
+    double h = std::tan(theta / 2);
+	m_viewport_height = 2 * h * m_focal_length;
 	m_viewport_width = (m_viewport_height * image_width) / m_image_height;
 	
 	m_viewport_u = Vector3d(m_viewport_width, 0, 0);
