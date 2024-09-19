@@ -51,6 +51,29 @@ void Camera::Initialize(bool force_initialize)
 	m_image = Image(image_width, m_image_height);
 
 	m_is_initialized = true;
+
+    if (verbose)
+    {
+        std::clog << "Camera parameters:"
+            << "\n- Image size (w x h) [px]: " << image_width << " x " << m_image_height 
+            << "\n  - Desired aspect ratio: " << aspect_ratio 
+            << "\n  - Actual aspect ratio:  " << double(image_width) / m_image_height
+            << "\n- Viewport size (w x h): " << m_viewport_width << " x " << m_viewport_height
+            << "\n- Vertical FOV [deg]: " << vfov 
+            << "\n- Focus distance: " << focus_distance
+            << "\n- Defocus blur"
+            << "\n  - Angle [deg]: " << defocus_angle
+            << "\n  - Radius: " << defocus_radius
+            << "\n- Camera frame"
+            << "\n  - Look from: " << look_from 
+            << "\n  - Look at:   " << look_at
+            << "\n  - Up vector: " << v_up
+            << "\n  - Axes"
+            << "\n    - u (right): " << m_u
+            << "\n    - v (up):    " << m_v
+            << "\n    - w (away):  " << m_w
+            << std::endl;
+    }
 }
 
 RGB Camera::GetRayColor(const Ray &r, int depth) const
