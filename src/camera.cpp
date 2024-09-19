@@ -23,17 +23,22 @@ void Camera::Initialize(bool force_initialize)
 	// Make sure height is at least 1
 	m_image_height = (m_image_height < 1) ? 1 : m_image_height;
 
-	// TODO: should focal length be a public parameter
-	m_focal_length = 1;
+    m_origin = look_from;
+
+	m_focal_length = (look_from - look_at).Length();
     double theta = Utility::deg2rad(vfov);
     double h = std::tan(theta / 2);
 	m_viewport_height = 2 * h * m_focal_length;
 	m_viewport_width = (m_viewport_height * image_width) / m_image_height;
+
+    m_w = (look_from - look_at).Unit();
+    m_u = v_up.cross(m_w).Unit();
+    m_v = m_w.cross(m_u);
 	
-	m_viewport_u = Vector3d(m_viewport_width, 0, 0);
-	m_viewport_v = Vector3d(0, -m_viewport_height, 0);
-	m_viewport_upper_left = origin 
-							- Vector3d(0, 0, m_focal_length)
+	m_viewport_u = m_viewport_width * m_u;
+	m_viewport_v = m_viewport_height * -m_v;
+	m_viewport_upper_left = m_origin 
+							- m_focal_length * m_w
 							- m_viewport_u / 2 
 							- m_viewport_v / 2;
 
@@ -83,9 +88,9 @@ Ray Camera::GetRay(size_t x, size_t y) const
 	auto pixel_sample = m_pixel_00 
 						+ (x + offset.x()) * m_pixel_delta_u 
 						+ (y + offset.y()) * m_pixel_delta_v;
-	auto ray_direction = pixel_sample - origin;
+	auto ray_direction = pixel_sample - m_origin;
 
-	return Ray(origin, ray_direction);
+	return Ray(m_origin, ray_direction);
 }
 
 void Camera::Render(bool force_initialize)

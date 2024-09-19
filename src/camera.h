@@ -24,11 +24,13 @@ public:
 
 	size_t image_width = 100;
 	double aspect_ratio = 1.0;
-	Vector3d origin;
 	size_t samples_per_pixel = 10;
 	bool verbose = false;
 	size_t max_bounces = 10;
     double vfov = 90;  // Vertical field of view, in degrees
+    Point3d look_from = Point3d{0, 0, 0};
+    Point3d look_at = Point3d{0, 0, -1};
+    Vector3d v_up = Vector3d{0, 1, 0};
 
 private:
 	size_t m_image_height;
@@ -42,6 +44,12 @@ private:
 	Vector3d m_pixel_00;
 	Vector3d m_pixel_delta_u;
 	Vector3d m_pixel_delta_v;
+
+    // Camera frame basis vectors
+	Vector3d m_origin;
+    Vector3d m_u;
+    Vector3d m_v;
+    Vector3d m_w;
 
 	double m_focal_length;
 	
