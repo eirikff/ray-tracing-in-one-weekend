@@ -28,7 +28,7 @@ inline double random_double()
 }
 
 // Returns a random real number in the range [min, max).
-inline double random_double(int min, int max)
+inline double random_double(double min, double max)
 {
 	return min + (max - min) * random_double();
 }
