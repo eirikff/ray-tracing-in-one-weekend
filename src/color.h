@@ -1,6 +1,7 @@
 #pragma once
 
 #include "interval.h"
+#include "utility.h"
 #include "vector3d.h"
 #include <array>
 #include <cstdint>
@@ -46,6 +47,15 @@ public:
 		   << std::to_string(uint8_t(c.B()));
 		return os;
 	}
+
+    static inline RGB Random()
+    {
+        return RGB{Vector3d::Random()};
+    }
+    static inline RGB Random(double min, double max)
+    {
+        return RGB{Vector3d::Random(min, max)};
+    }
 
 private:
 	static const Interval pixel_intensity;
