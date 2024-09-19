@@ -161,6 +161,17 @@ public:
 			return -unit;
 		}
 	}
+    static Vector3d RandomInUnitDisk()
+    {
+        while (true)
+        {
+            Vector3d p{Utility::random_double(-1, 1), Utility::random_double(-1, 1), 0};
+            if (p.LengthSquared() < 1) 
+            {
+                return p;
+            }
+        }
+    }
     static Vector3d Reflect(const Vector3d &v, const Vector3d& n)
     {
         return v - 2 * v.dot(n) * n;

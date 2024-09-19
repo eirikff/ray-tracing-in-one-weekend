@@ -25,10 +25,9 @@ void Camera::Initialize(bool force_initialize)
 
     m_origin = look_from;
 
-	m_focal_length = (look_from - look_at).Length();
     double theta = Utility::deg2rad(vfov);
     double h = std::tan(theta / 2);
-	m_viewport_height = 2 * h * m_focal_length;
+	m_viewport_height = 2 * h * focus_distance;
 	m_viewport_width = (m_viewport_height * image_width) / m_image_height;
 
     m_w = (look_from - look_at).Unit();
@@ -38,10 +37,13 @@ void Camera::Initialize(bool force_initialize)
 	m_viewport_u = m_viewport_width * m_u;
 	m_viewport_v = m_viewport_height * -m_v;
 	m_viewport_upper_left = m_origin 
-							- m_focal_length * m_w
+							- focus_distance * m_w
 							- m_viewport_u / 2 
 							- m_viewport_v / 2;
 
+    double defocus_radius = focus_distance * std::tan(Utility::deg2rad(defocus_angle / 2));
+    m_defocus_disk_u = defocus_radius * m_u;
+    m_defocus_disk_v = defocus_radius * m_v;
 
 	m_pixel_delta_u = m_viewport_u / image_width;
 	m_pixel_delta_v = m_viewport_v / m_image_height;
@@ -59,11 +61,17 @@ void Camera::Initialize(bool force_initialize)
             << "\n  - Desired aspect ratio: " << aspect_ratio 
             << "\n  - Actual aspect ratio:  " << double(image_width) / m_image_height
             << "\n- Viewport size (w x h): " << m_viewport_width << " x " << m_viewport_height
+            << "\n  - Viewport u: " << m_viewport_u
+            << "\n  - Viewport v: " << m_viewport_v
+            << "\n  - Pixel delta u: " << m_pixel_delta_u
+            << "\n  - Pixel delta v: " << m_pixel_delta_v
             << "\n- Vertical FOV [deg]: " << vfov 
             << "\n- Focus distance: " << focus_distance
             << "\n- Defocus blur"
             << "\n  - Angle [deg]: " << defocus_angle
             << "\n  - Radius: " << defocus_radius
+            << "\n  - disk_u: " << m_defocus_disk_u
+            << "\n  - disk_v: " << m_defocus_disk_v
             << "\n- Camera frame"
             << "\n  - Look from: " << look_from 
             << "\n  - Look at:   " << look_at
@@ -111,9 +119,10 @@ Ray Camera::GetRay(size_t x, size_t y) const
 	auto pixel_sample = m_pixel_00 
 						+ (x + offset.x()) * m_pixel_delta_u 
 						+ (y + offset.y()) * m_pixel_delta_v;
-	auto ray_direction = pixel_sample - m_origin;
+    auto ray_origin = (defocus_angle <= 0) ? m_origin : DefocusDiskSample();
+	auto ray_direction = pixel_sample - ray_origin;
 
-	return Ray(m_origin, ray_direction);
+	return Ray(ray_origin, ray_direction);
 }
 
 void Camera::Render(bool force_initialize)

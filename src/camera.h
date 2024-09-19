@@ -27,10 +27,14 @@ public:
 	size_t samples_per_pixel = 10;
 	bool verbose = false;
 	size_t max_bounces = 10;
+
     double vfov = 90;  // Vertical field of view, in degrees
     Point3d look_from = Point3d{0, 0, 0};
     Point3d look_at = Point3d{0, 0, -1};
     Vector3d v_up = Vector3d{0, 1, 0};
+
+    double defocus_angle = 0; // Variation angle of rays through each pixel
+    double focus_distance = 10; // Distance from camera lookfrom point to plane of perfect focus
 
 private:
 	size_t m_image_height;
@@ -51,7 +55,8 @@ private:
     Vector3d m_v;
     Vector3d m_w;
 
-	double m_focal_length;
+    Vector3d m_defocus_disk_u; // Horizontal radius
+    Vector3d m_defocus_disk_v; // Vertical radius
 	
 	HittableList m_scene;
 	// The minimum distance from the surface a point has to be to be considered
@@ -66,6 +71,11 @@ private:
 			0
 		);
 	}
+    Point3d DefocusDiskSample() const 
+    {
+        auto p = Vector3d::RandomInUnitDisk();
+        return m_origin + (p[0] * m_defocus_disk_u) + (p[1] * m_defocus_disk_v);
+    }
 	Ray GetRay(size_t x, size_t y) const;
 	RGB GetRayColor(const Ray& ray, int depth) const;
 

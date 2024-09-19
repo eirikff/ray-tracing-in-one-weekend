@@ -5,7 +5,6 @@
 #include "camera.h"
 #include "hittable_list.h"
 #include "sphere.h"
-#include "utility.h"
 #include "vector3d.h"
 #include "material/lambertian.h"
 #include "material/metal.h"
@@ -41,10 +40,13 @@ void Run(size_t image_width)
     cam.v_up = Vector3d(0, 1, 0);
     cam.vfov = 20;
 
+    cam.defocus_angle = 10;
+    cam.focus_distance = 3.4;
+
 	cam.SetScene(scene);
 	cam.Render();
 	cam.Save("output.png");
-	cam.Save("output.ppm");
+	// cam.Save("output.ppm");
 }
 
 int main() 
